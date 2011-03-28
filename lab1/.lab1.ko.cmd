@@ -1,1 +1,0 @@
-cmd_/home/kakadu-ldd/lab1/lab1.ko := ld -r -m elf_i386 -T /home/kakadu-ldd/linux-source-2.6.32/scripts/module-common.lds --build-id -o /home/kakadu-ldd/lab1/lab1.ko /home/kakadu-ldd/lab1/lab1.o /home/kakadu-ldd/lab1/lab1.mod.o
