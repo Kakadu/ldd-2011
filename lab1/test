@@ -1,0 +1,3 @@
+#!/bin/bash
+sudo insmod ./lab1.ko && dmesg | tail -n 3 && sudo rmmod ./lab1.ko
+
