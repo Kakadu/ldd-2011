@@ -7,12 +7,13 @@
 #include <linux/crc32.h>
 #include <asm-generic/io.h>
 
-static void *iter(void *v) {
+static void *iter(void *v) 
+{
 	struct resource *p = v;
 	if (p->child != NULL)
 		return p->child;
 	while ((p->sibling == NULL) && (p->parent != NULL)) 
-		p = p-> parent;
+		p = p->parent;
 	return p->sibling;
 }
 
