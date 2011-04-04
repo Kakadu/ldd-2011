@@ -6,12 +6,8 @@
 #include <linux/types.h>
 #include <linux/crc32.h>
 #include <asm-generic/io.h>
-#define MODULE_NAME hallo
 
 static void *iter(void *v) {
-	/* ?? maybe to include $(KERNEL_SRC)/kernel/resource.h ???
-	 * to use r_next function?
-	 */
 	struct resource *p = v;
 	if (p->child != NULL)
 		return p->child;
@@ -20,33 +16,37 @@ static void *iter(void *v) {
 	return p->sibling;
 }
 
-static u32 find(void *v, char *name) {
+static bool find(u32 *ans, void *v, char *name) 
+{
 	struct resource *p = v;
 	while (p != NULL) {
 		if (strcmp(name,p->name) == 0) {
-			return crc32(0, phys_to_virt(p->start), 
-					resource_size(p) );
+			*ans = crc32(0xFFFFFFFF, phys_to_virt(p->start), 
+					 	 resource_size(p) );
+			return true;
 		}
 		p = iter(p);
 	}
-	return 0;
+	return false;
 }
 
-char *KERNEL_CODE = "Kernel code";
+#define KERNEL_CODE "Kernel code"
 
-static int __init MODULE_NAME_init(void) {
- 	u32 ans = find(&iomem_resource, "Kernel code");
-	if (ans == 0) { 
-		printk("%s not found", KERNEL_CODE);
-	} else {
+static int __init lab1_init(void) 
+{		
+ 	u32 ans = 0;
+	if (find(&ans, &iomem_resource, KERNEL_CODE)) {
 		printk("CRC32 of %s = %u\n", KERNEL_CODE, ans);
+	} else {
+		printk("%s not found", KERNEL_CODE);
 	}
 	return 0;
 }
 
-static void __exit MODULE_NAME_exit(void) {
+static void __exit lab1_exit(void) 
+{
 }
 
-module_init(MODULE_NAME_init);
-module_exit(MODULE_NAME_exit);
+module_init(lab1_init);
+module_exit(lab1_exit);
 
