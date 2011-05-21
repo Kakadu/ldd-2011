@@ -1,1 +1,8 @@
 My practices to study programmin Linux Device Drivers
+
+lab1
+small module to evaluate CRC of kernel memory block
+
+lab2
+fork of brd. driver which provides symbolic and block device of RAM disk
+
